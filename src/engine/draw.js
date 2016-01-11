@@ -1,3 +1,5 @@
+/* global paper */
+
 class Draw {
 
     static arc(center, radius, from, through, to, color, strokeWidth) {
