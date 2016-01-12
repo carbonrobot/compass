@@ -2,22 +2,25 @@
  * Compass Ring
  */
 class Compass {
-    constructor(center, radius, width, heading) {
+    constructor(center, radius, width, data) {
         this.center = center;
         this.radius = radius;
         this.width = width;
-        this.heading = heading;
+        this.heading = data.heading;
     }
 
     render() {
         
         Draw.circle(this.center, this.radius, COLOR_WHITE, this.width);
-
+        
+        var group = Draw.createGroup();
+        
         for (var t = 0; t < 360; t += 10) {
+            
             if (t % 30 == 0) {
                 // tack-degrees
-                var pt = Math.toPointOnCircle(this.center, this.radius - (this.width / 2) + 2, t);
-                var text = new paper.PointText({
+                const pt = Math.toPointOnCircle(this.center, this.radius - (this.width / 2) + 2, t);
+                const text = new paper.PointText({
                     point: pt,
                     content: t.toString(),
                     fillColor: COLOR_DARK,
@@ -27,12 +30,17 @@ class Compass {
                     justification: 'center'
                 });
                 text.rotate(t + 90, pt);
+                group.addChild(text);
             }
             else {
                 const pt = Math.toPointOnCircle(this.center, this.radius, t);
-                Draw.filledCircle(pt, 1.5, COLOR_DARKGRAY);
+                const dot = Draw.filledCircle(pt, 1.5, COLOR_DARKGRAY);
+                group.addChild(dot);
             }
         }
+        
+        // rotate group to heading
+        group.rotate(270 - this.heading, this.center);
 
         // heading
         var hpt = Math.toPointOnCircle(this.center, this.radius - this.width / 2, 270);

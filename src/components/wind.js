@@ -2,11 +2,12 @@
  * Wind Directional
  */
 class WindDirection {
-    constructor(center, radius, color, angle) {
+    constructor(center, radius, color, data, selector) {
         this.center = center;
         this.radius = radius;
         this.color = color;
-        this.angle = angle;
+        this.heading = data.heading;
+        this.angle = data[selector];
     }
     
     render() {
@@ -18,9 +19,6 @@ class WindDirection {
         path.add(Math.toPointOnCircle(this.center, this.radius, this.angle));
         path.add(Math.toPointOnCircle(this.center, this.radius + RING_WIDTH * scale, this.angle - delta));
         path.add(Math.toPointOnCircle(this.center, this.radius + RING_WIDTH * scale, this.angle + delta));
-    }
-
-    update() {
-        // change angle
+        path.rotate(270 - this.heading, this.center);
     }
 }

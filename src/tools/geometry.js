@@ -18,4 +18,22 @@ Math.toPointOnCircle = function (center, radius, angle) {
     };
 }
 
+/**
+ * Transform degrees to screen coordinates
+ */
+Math.normalizeAngle = function(theta){
+    return theta > 360 ? 360 - theta : theta;
+}
 
+/**
+ * Clamp a value between to numbers
+ */
+Math.clamp = function(min, max, value){
+    if(value < min){
+        return min;
+    }
+    if(value > max){
+        return max;
+    }
+    return value;
+}

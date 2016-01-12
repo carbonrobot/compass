@@ -9,44 +9,46 @@ var COLOR_DARK = 'black',
     RING_WIDTH = 18,
     RING_MARGIN = 9;
 
-var canvas, bounds, radius, center, renderer;
+var canvas, radius, center, renderer;
 
 function render() {
-    var heading = 270;
-    var twd = 310;
-    var awd = 298;
-    var twa = Math.abs(heading - twd);
-    var awa = Math.abs(heading - awd);
-    var rudder_angle = 8;
+    let data = {
+        heading: 260,
+        twd: 300,
+        awd: 290,
+        rudderAngle: 8,
+        currentAngle: 32
+    };
 
     // frame
-    const frame = new Frame(canvas); 
+    const frame = new Frame(canvas, data); 
        
     // bezel
     const bezel_radius = radius - MARGIN;
     const bezel = new Bezel(center, bezel_radius, RING_WIDTH);
     
     // wind
-    const wind_true = new WindDirection(center, bezel_radius, COLOR_twd, twd);
-    const wind_apparent = new WindDirection(center, bezel_radius, COLOR_awd, awd);
+    const wind_true = new WindDirection(center, bezel_radius, COLOR_twd, data, 'twd');
+    const wind_apparent = new WindDirection(center, bezel_radius, COLOR_awd, data, 'awd');
     
     // compass
     const compass_radius = bezel_radius - RING_WIDTH - RING_MARGIN;
-    const compass = new Compass(center, compass_radius, RING_WIDTH, heading);
+    const compass = new Compass(center, compass_radius, RING_WIDTH, data);
     
     // boat
     var boat_radius = compass_radius - RING_WIDTH - RING_MARGIN;
     const boat = new Boat(center, boat_radius);
     
     // tack lines
-    const tacklines = new TackLines(center, boat_radius, twd);
+    const tacklines = new TackLines(center, boat_radius, data);
     
     // rudder
-    var rudder_center = center.add([0, center.y / 4]);
-    var rudder_radius = center.y / 4;
-    const rudder = new Rudder(rudder_center, rudder_radius, rudder_angle);
+    const rudder_center = center.add([0, center.y / 4]);
+    const rudder_radius = center.y / 4;
+    const rudder = new Rudder(rudder_center, rudder_radius, data);
     
     // water current
+    const water = new Water(center, center.y / 5, data);
     
     var components = [
         frame,
@@ -56,7 +58,8 @@ function render() {
         compass,
         boat,
         tacklines,
-        rudder
+        rudder,
+        water
     ];
 
     renderer = new Renderer(components, canvas);
@@ -70,11 +73,9 @@ function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
+    let bounds = window.innerHeight;
     if (window.innerHeight > window.innerWidth) {
         bounds = window.innerWidth;
-    }
-    else {
-        bounds = window.innerHeight;
     }
     radius = bounds / 2;
     center = Draw.getPoint(canvas.width / 2, canvas.height / 2);

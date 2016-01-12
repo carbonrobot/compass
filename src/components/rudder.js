@@ -2,10 +2,10 @@
  * Rudder Indicator
  */
 class Rudder {
-    constructor(center, radius, angle) {
+    constructor(center, radius, data) {
         this.center = center;
         this.radius = radius;
-        this.angle = angle;
+        this.angle = data.rudderAngle;
     }
 
     render() {
