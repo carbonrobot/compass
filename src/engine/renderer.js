@@ -3,25 +3,20 @@
 /**
  * Encapsulates paper.js drawing
  */
-class Renderer {
-    constructor(components, target) {
-        this.components = components;
-        this.target = target;
+export class Renderer {
+
+    constructor(target, onFrame) {
+        paper.setup(target);
+        paper.view.onFrame = onFrame || function() {};
     }
 
-    setup() {
-        paper.setup(this.target);
-    }
-
-    render() {
-        if (this.components) {
-            for (var i = 0; i < this.components.length; i++) {
-                this.components[i].render();
+    render(components) {
+        if (components) {
+            for (let i = 0; i < components.length; i++) {
+                components[i].render();
             }
+            paper.view.draw();
         }
     }
 
-    finalize() {
-        paper.view.draw();
-    }
 }

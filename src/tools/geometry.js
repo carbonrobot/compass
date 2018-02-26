@@ -1,39 +1,44 @@
-// Converts from degrees to radians.
-Math.toRadians = function (degrees) {
-    return degrees * Math.PI / 180;
-};
- 
-// Converts from radians to degrees.
-Math.toDegrees = function (radians) {
-    return radians * 180 / Math.PI;
-};
+export class Geometry {
 
-/**
- * Find a point on a circle
- */
-Math.toPointOnCircle = function (center, radius, angle) {
-    return {
-        x: center.x + radius * Math.cos(Math.toRadians(angle)),
-        y: center.y + radius * Math.sin(Math.toRadians(angle))
+
+    // Converts from degrees to radians.
+    static toRadians(degrees) {
+        return degrees * Math.PI / 180;
     };
-}
 
-/**
- * Transform degrees to screen coordinates
- */
-Math.normalizeAngle = function(theta){
-    return theta > 360 ? 360 - theta : theta;
-}
+    // Converts from radians to degrees.
+    static toDegrees(radians) {
+        return radians * 180 / Math.PI;
+    };
 
-/**
- * Clamp a value between to numbers
- */
-Math.clamp = function(min, max, value){
-    if(value < min){
-        return min;
+    /**
+     * Find a point on a circle
+     */
+    static toPointOnCircle(center, radius, angle) {
+        return {
+            x: center.x + radius * Math.cos(Geometry.toRadians(angle)),
+            y: center.y + radius * Math.sin(Geometry.toRadians(angle))
+        };
     }
-    if(value > max){
-        return max;
+
+    /**
+     * Transform degrees to screen coordinates
+     */
+    static normalizeAngle(theta) {
+        return theta > 360 ? 360 - theta : theta;
     }
-    return value;
+
+    /**
+     * Clamp a value between to numbers
+     */
+    static clamp(min, max, value) {
+        if (value < min) {
+            return min;
+        }
+        if (value > max) {
+            return max;
+        }
+        return value;
+    }
+
 }

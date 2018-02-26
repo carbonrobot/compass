@@ -1,6 +1,8 @@
+import { Geometry } from "../tools";
+
 /* global paper */
 
-class Draw {
+export class Draw {
 
     static arc(center, radius, from, through, to, color, strokeWidth) {
         return this._arc(center, radius, from, through, to, color, strokeWidth);
@@ -31,13 +33,21 @@ class Draw {
             fillColor: fillColor
         });
     }
+
+    static getPath(options) {
+        return new paper.Path(options);
+    }
     
     static getPoint(x, y){
         return new paper.Point(x, y);
     }
 
+    static getMidPoint(x, y) {
+        return new paper.Point(x/2, y/2);
+    }
+
     static gradientArc(center, radius, from, through, to, gradientStops, strokeWidth) {
-        const getPoint = (angle) => Math.toPointOnCircle(center, radius, angle);
+        const getPoint = (angle) => Geometry.toPointOnCircle(center, radius, angle);
         const gradient = {
             gradient: {
                 stops: gradientStops
@@ -63,11 +73,11 @@ class Draw {
         return new paper.Path.Rectangle(options);
     }
     
-    static text(center, content, fontSize){
-        new paper.PointText({
+    static text(center, content, fontSize, fontColor = '#EEE'){
+        return new paper.PointText({
             point: center,
             content: content,
-            fillColor: COLOR_WHITE,
+            fillColor: fontColor,
             fontFamily: 'Arial',
             fontWeight: 'bold',
             fontSize: fontSize,
@@ -76,7 +86,7 @@ class Draw {
     }
     
     static _arc(center, radius, from, through, to, strokeColor, strokeWidth) {
-        const getPoint = (angle) => Math.toPointOnCircle(center, radius, angle);
+        const getPoint = (angle) => Geometry.toPointOnCircle(center, radius, angle);
         const arc = new paper.Path({
             strokeWidth: strokeWidth,
             strokeColor: strokeColor

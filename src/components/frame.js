@@ -1,42 +1,60 @@
+import { Draw } from '../engine';
+import { Settings } from '../tools';
+
+const sections = 4;
+const margin = 10;
+const props = ['heading', 'twd', 'awd'];
+
 /**
  * Background workspace
  */
-class Frame {
-    constructor(bounds, data){
-        this.bounds = bounds;
-        this.data = data;
+export class Frame {
+
+    constructor(stage) {
+        this.stage = stage;
+        this.width = this.stage.width / 8;
+        this.height = (this.stage.height - (margin * sections) - margin) / sections;
+        this.center = Draw.getMidPoint(this.width, this.height);
+        this.size = [this.width, this.height];
     }
-    
+
     render() {
-        
         Draw.rectangle({
             point: [0, 0],
-            size: [this.bounds.width, this.bounds.height],
+            size: [this.stage.width, this.stage.height],
             strokeColor: 'orange',
             strokeWidth: 5,
-            fillColor: COLOR_DARK
+            fillColor: Settings.COLOR_DARK
         });
         
-        const sections = 4;
-        const margin = 10;
-        const width = this.bounds.width / 4;
-        const height = (this.bounds.height - (margin * sections) - margin) / sections;
-        const center = Draw.getPoint(width/2, height/2);
-        const props = ['heading', 'twd', 'awd'];
-        
-        for (let i = 0; i < 5; i++) {
+        // make these objects as well
+        for (let i = 0; i < sections; i++) {
             Draw.rectangle({
-                point: [10,(i*height) + (margin * i) + margin],
-                size: [width,height],
-                strokeColor: COLOR_DARKGRAY,
+                point: [10, (i * this.height) + (margin * i) + margin],
+                size: this.size,
+                strokeColor: Settings.DARKGRAY,
                 strokeWidth: 2,
                 radius: 8
             });
-            
-            Draw.text(center.add([0,i*height]), this.data[props[i]], 48);
         }
-        
-        
-        
+    }
+
+    renderValues(data) {
+        if(this.textGroup){
+            this.textGroup.remove();
+        }
+        const group = Draw.createGroup();
+        for (let i = 0; i < sections; i++) {
+            const textHeight = this.height / 2;
+            const startPos = [0, i * (this.height + margin) + textHeight / 2];
+            group.addChild(
+                Draw.text(this.center.add(startPos), data[props[i]], textHeight)
+            );
+        }
+        this.textGroup = group;
+    }
+
+    update(data) {
+        this.renderValues(data);
     }
 }
